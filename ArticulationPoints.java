@@ -27,14 +27,14 @@ public class ArticulationPoints {
             if (visited[neighbour]) {
                 lowestNeigh[curr] = Math.min(lowestNeigh[curr], dfsDisc[neighbour]);
             } else {
-                dfs(graph, neighbour, curr, visited, dfsDisc, lowestNeigh, visited2, articulationPoints);
+                dfs(graph, neighbour, curr, visited, dfsDisc, lowestNeigh, articulationPoints);
                 lowestNeigh[curr] = Math.min(lowestNeigh[curr], lowestNeigh[neighbour]);
                 if (lowestNeigh[neighbour] >= dfsDisc[curr] && parent != -1) {
                     articulationPoints.add(curr);
                 }
                 children++;
             }
-            if (parent == -1 && children > 1 && lowestNeigh[neighbour] >= dfsDisc[curr]) {
+            if (parent == -1 && children > 1 && lowestNeigh[neighbour] > dfsDisc[curr]) {
                 articulationPoints.add(curr);
             }
         }
