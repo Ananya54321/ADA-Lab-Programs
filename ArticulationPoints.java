@@ -10,14 +10,14 @@ public class ArticulationPoints {
         boolean[] visited = new boolean[graph.size()];
         for (int i = 0; i < graph.size(); i++) {
             if (!visited[i]) {
-                dfs(graph, i, -1, visited, dfsDisc, lowestNeigh, visited, articulationPoints);
+                dfs(graph, i, -1, visited, dfsDisc, lowestNeigh, articulationPoints);
             }
         }
         return articulationPoints;
     }
 
     private static void dfs(List<List<Integer>> graph, int curr, int parent, boolean[] visited, int[] dfsDisc,
-            int[] lowestNeigh, boolean[] visited2, HashSet<Integer> articulationPoints) {
+            int[] lowestNeigh, HashSet<Integer> articulationPoints) {
         visited[curr] = true;
         dfsDisc[curr] = lowestNeigh[curr] = timer++;
         int children = 0;
