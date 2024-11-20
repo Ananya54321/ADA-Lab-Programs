@@ -4,18 +4,11 @@ public class Main {
     static class Edge {
         int destination;
         int weight;
-        int shortestDistance; // To track shortest distance from the source
 
+        // Constructor for Edge class
         Edge(int destination, int weight) {
             this.destination = destination;
             this.weight = weight;
-            this.shortestDistance = Integer.MAX_VALUE; // Initialize with "infinity"
-        }
-
-        Edge(int destination, int weight, int shortestDistance) {
-            this.destination = destination;
-            this.weight = weight;
-            this.shortestDistance = shortestDistance;
         }
     }
 
@@ -27,14 +20,14 @@ public class Main {
         }
         distances.put(start, 0);
 
-        // Priority queue to hold edges with minimum shortestDistance (min-heap)
-        PriorityQueue<Edge> priorityQueue = new PriorityQueue<>(Comparator.comparingInt(edge -> edge.shortestDistance));
-        priorityQueue.offer(new Edge(start, 0, 0)); // Start node with distance 0
+        // Priority queue to hold nodes based on minimum distance (min-heap)
+        PriorityQueue<int[]> priorityQueue = new PriorityQueue<>(Comparator.comparingInt(a -> a[1]));
+        priorityQueue.offer(new int[] {start, 0}); // Start node with distance 0
 
         while (!priorityQueue.isEmpty()) {
-            Edge currentEdge = priorityQueue.poll();
-            int currNode = currentEdge.destination;
-            int currDist = currentEdge.shortestDistance;
+            int[] current = priorityQueue.poll();
+            int currNode = current[0];
+            int currDist = current[1];
 
             // If current distance is greater than the stored distance, skip
             if (currDist > distances.get(currNode)) continue;
@@ -47,7 +40,7 @@ public class Main {
                 // Update distance if a shorter path is found
                 if (newDist < distances.get(neighbor)) {
                     distances.put(neighbor, newDist);
-                    priorityQueue.offer(new Edge(neighbor, edge.weight, newDist));
+                    priorityQueue.offer(new int[] {neighbor, newDist});
                 }
             }
         }
@@ -68,18 +61,21 @@ public class Main {
         System.out.println("Enter the number of edges: ");
         int edges = sc.nextInt();
         for (int i = 0; i < edges; i++) {
-            System.out.println("Enter the source, destination and weight of edge " + (i + 1) + ": ");
+            System.out.println("Enter the source, destination, and weight of edge " + (i + 1) + ": ");
             int source = sc.nextInt();
             int destination = sc.nextInt();
             int weight = sc.nextInt();
             graph.get(source).add(new Edge(destination, weight));
-            graph.get(destination).add(new Edge(source, weight));
+            graph.get(destination).add(new Edge(source, weight)); // Since it's an undirected graph
         }
 
         System.out.println("Enter the source vertex: ");
         int start = sc.nextInt();
 
+        // Find the shortest distances using Dijkstra's algorithm
         Map<Integer, Integer> distances = dijkstra(graph, start);
+
+        // Print the shortest paths
         System.out.println("Shortest distances from source " + start + ": ");
         for (int node : distances.keySet()) {
             System.out.println("To node " + node + " - Distance: " + distances.get(node));
